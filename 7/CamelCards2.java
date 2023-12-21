@@ -5,30 +5,34 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 /**
- * CamelCards Part #1
+ * CamelCards Part #2
  * 
  * Order the input lines by hand strength (weakest gets Rank 1).
  * Multiply rank by bid amount.
  * Sum up results of multiplication.
+ * 
+ * J is now a joker card.
+ * It has a lower value than the 2 card.
+ * It morphs into the appropriate card to get the strongest hand type possible.
  */
-public class CamelCards1 {
+public class CamelCards2 {
 
     HashMap<String, Integer> cardValueMap = new HashMap<String, Integer>();
 
-    public static ArrayList<Hand> loadData(String fileName) {
-        ArrayList<Hand> hands = new ArrayList<Hand>();
+    public static ArrayList<HandJoker> loadData(String fileName) {
+        ArrayList<HandJoker> hands = new ArrayList<HandJoker>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Hand hand = new Hand(line);
+                HandJoker hand = new HandJoker(line);
                 hands.add(hand);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        hands.sort(new Comparator<Hand>() {
+        hands.sort(new Comparator<HandJoker>() {
             @Override
-            public int compare(Hand first, Hand second) {
+            public int compare(HandJoker first, HandJoker second) {
                 // primary sort: by type
                 int typeCompare = Integer.compare(first.type, second.type);
                 if (typeCompare != 0) {
@@ -52,10 +56,10 @@ public class CamelCards1 {
     }
 
     public static void main(String[] args) {  
-        ArrayList<Hand> hands = loadData("./input.txt");
+        ArrayList<HandJoker> hands = loadData("./input.txt");
         int sum = 0;
         for (int i = 0; i < hands.size(); i++) {
-            Hand h = hands.get(i);
+            HandJoker h = hands.get(i);
             sum += h.bid * (i + 1);
         }
         System.out.println(sum);

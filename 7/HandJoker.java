@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class Hand {
+public class HandJoker {
     public int bid;
     public String cards;
 
@@ -37,7 +37,7 @@ public class Hand {
     public int[] cardValues;
 
 
-    public Hand(String line) {
+    public HandJoker(String line) {
         String[] splitLine = line.split(" ");
         cards = splitLine[0];
         bid = Integer.parseInt(splitLine[1]);
@@ -47,17 +47,28 @@ public class Hand {
 
     public void determineType() {
         // count the occurances of each card
-        HashMap<Character, Integer> charCounts = new HashMap<>();
-        
+        HashMap<String, Integer> charCounts = new HashMap<>();
+
         for (int i = 0; i < 5; i++) {
             char ch = this.cards.charAt(i);
-            Integer count = charCounts.get(ch) == null ? 0 : charCounts.get(ch);
-            charCounts.put(ch, count + 1);
+            String str = String.valueOf(ch);
+            Integer count = charCounts.get(str) == null ? 0 : charCounts.get(str);
+            charCounts.put(str, count + 1);
         }
+
+        Integer jokerCount = charCounts.get("J") == null ? 0 : charCounts.get("J");
+        charCounts.remove("J");
 
         ArrayList<Integer> counts = new ArrayList<>(charCounts.values());
         // sort greatest count first
         counts.sort(Comparator.reverseOrder());
+        // add joker count to most frequent card count, increasing hand value
+        try {
+            Integer newFirst = counts.get(0) + jokerCount;
+            counts.set(0, newFirst);
+        } catch (IndexOutOfBoundsException e) {
+            counts.add(jokerCount);
+        }
 
         // figure out the type based on the card counts
         switch (counts.get(0)) {
@@ -88,7 +99,7 @@ public class Hand {
                     cardValues[i] = 10;
                     break;
                 case "J":
-                    cardValues[i] = 11;
+                    cardValues[i] = 1;
                     break;
                 case "Q":
                     cardValues[i] = 12;
