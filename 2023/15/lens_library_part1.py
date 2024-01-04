@@ -3,7 +3,7 @@
 # Calculate the hash of each comma-seperated string
 # Sum up the hash results
 
-def hash(string: str):
+def custom_hash(string: str):
     val = 0
     for s in string:
         val += ord(s)
@@ -19,7 +19,7 @@ def main(filename: str):
     hash_sum = 0
 
     for step in sequence:
-        hash_sum += hash(step)
+        hash_sum += custom_hash(step)
 
     print(hash_sum)
 
