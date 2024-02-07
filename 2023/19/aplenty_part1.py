@@ -1,6 +1,6 @@
 # Aplenty Part #1
 
-from ast import literal_eval
+# Goal: Sum up the rating values of the parts that are accepted
 
 class Part:
     ratings: dict[str, int]
